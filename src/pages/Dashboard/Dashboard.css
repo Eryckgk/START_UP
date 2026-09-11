@@ -1,0 +1,145 @@
+.dashboard {
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.dashboard-layout {
+    display: flex;
+}
+
+.dashboard-content {
+    flex: 1;
+
+    padding: 30px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+
+    font-size: 28px;
+}
+
+.dashboard-header p {
+    margin-top: 6px;
+
+    color: #6b7280;
+}
+
+.dashboard-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin: 25px 0 30px;
+}
+
+.dashboard-stat {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+
+    padding: 20px;
+}
+
+.dashboard-stat span {
+    font-size: 22px;
+}
+
+.dashboard-stat strong {
+    display: block;
+
+    margin-top: 10px;
+
+    font-size: 25px;
+}
+
+.dashboard-stat p {
+    margin: 3px 0 0;
+
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+.dashboard-section {
+    margin-bottom: 30px;
+}
+
+.dashboard-section h2 {
+    font-size: 18px;
+
+    margin-bottom: 15px;
+}
+
+.dashboard-startups {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+.activity-list {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+.activity-list > div {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.activity-list > div:last-child {
+    border-bottom: none;
+}
+
+.activity-list span {
+    font-size: 18px;
+}
+
+.activity-list p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.activity-list strong {
+    color: #111827;
+}
+
+@media (max-width: 900px) {
+
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-startups {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+}

@@ -1,0 +1,44 @@
+
+.app-loading {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 16px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.app-loading-spinner {
+    width: 36px;
+    height: 36px;
+
+    border: 3px solid #dbeafe;
+    border-top-color: #2563eb;
+
+    border-radius: 50%;
+
+    animation: app-spin 0.8s linear infinite;
+}
+
+@keyframes app-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+

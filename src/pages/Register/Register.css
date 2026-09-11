@@ -1,0 +1,112 @@
+.register-page {
+    min-height: 100vh;
+
+    background: #f8fafc;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 460px;
+
+    padding: 38px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+}
+
+.register-brand {
+    text-align: center;
+
+    font-size: 24px;
+    font-weight: 800;
+
+    margin-bottom: 25px;
+}
+
+.register-brand strong {
+    color: #2563eb;
+}
+
+.register-container h1 {
+    margin: 0;
+
+    text-align: center;
+
+    font-size: 26px;
+}
+
+.register-container > p {
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    margin: 10px 0 25px;
+}
+
+.register-container form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+.register-container label {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.register-container input {
+    padding: 11px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.register-container input:focus {
+    border-color: #2563eb;
+}
+
+.register-login {
+    margin-top: 22px;
+    padding-top: 18px;
+
+    border-top: 1px solid #e5e7eb;
+
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.register-login a {
+    margin-left: 5px;
+
+    color: #2563eb;
+
+    text-decoration: none;
+    font-weight: 600;
+}

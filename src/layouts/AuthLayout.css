@@ -1,0 +1,266 @@
+
+.auth-layout {
+    min-height: 100vh;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    background: #f8fafc;
+}
+
+/* =========================
+   LADO DA MARCA
+========================= */
+
+.auth-layout-brand {
+    min-height: 100vh;
+
+    padding: 50px;
+
+    box-sizing: border-box;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(37, 99, 235, 0.18),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(59, 130, 246, 0.12),
+            transparent 35%
+        ),
+        #0f172a;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* LOGO */
+
+.auth-brand-logo {
+    position: absolute;
+
+    top: 35px;
+    left: 50px;
+
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.auth-brand-logo span {
+    color: white;
+}
+
+.auth-brand-logo strong {
+    color: #60a5fa;
+}
+
+/* CONTEÚDO */
+
+.auth-brand-content {
+    max-width: 520px;
+}
+
+.auth-brand-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 8px 13px;
+
+    border: 1px solid rgba(147, 197, 253, 0.25);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #bfdbfe;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    margin-bottom: 25px;
+}
+
+.auth-brand-content h1 {
+    margin: 0;
+
+    font-size: clamp(38px, 4vw, 58px);
+
+    line-height: 1.05;
+
+    letter-spacing: -2px;
+}
+
+.auth-brand-content h1 span {
+    color: #60a5fa;
+}
+
+.auth-brand-content > p {
+    margin-top: 24px;
+
+    max-width: 490px;
+
+    color: #cbd5e1;
+
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* FEATURES */
+
+.auth-brand-features {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+
+    margin-top: 45px;
+
+    max-width: 500px;
+}
+
+.auth-feature {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+.auth-feature > span {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    font-size: 19px;
+}
+
+.auth-feature strong {
+    display: block;
+
+    font-size: 14px;
+
+    color: white;
+}
+
+.auth-feature p {
+    margin: 3px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.auth-layout-content {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 900px) {
+
+    .auth-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-layout-brand {
+        min-height: auto;
+
+        padding: 110px 35px 50px;
+    }
+
+    .auth-brand-logo {
+        top: 30px;
+        left: 35px;
+    }
+
+    .auth-brand-content {
+        max-width: 700px;
+    }
+
+    .auth-brand-content h1 {
+        font-size: 44px;
+    }
+
+    .auth-brand-features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        max-width: 800px;
+    }
+
+    .auth-layout-content {
+        min-height: auto;
+
+        padding: 50px 25px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .auth-layout-brand {
+        padding: 100px 24px 35px;
+    }
+
+    .auth-brand-logo {
+        left: 24px;
+    }
+
+    .auth-brand-content h1 {
+        font-size: 36px;
+
+        letter-spacing: -1.5px;
+    }
+
+    .auth-brand-content > p {
+        font-size: 14px;
+    }
+
+    .auth-brand-features {
+        display: flex;
+
+        margin-top: 30px;
+    }
+
+    .auth-feature {
+        gap: 10px;
+    }
+
+    .auth-feature > span {
+        width: 36px;
+        height: 36px;
+    }
+
+    .auth-layout-content {
+        padding: 35px 18px;
+    }
+}
+

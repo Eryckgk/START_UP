@@ -1,0 +1,89 @@
+.communities {
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.communities-layout {
+    display: flex;
+}
+
+.communities-content {
+    flex: 1;
+
+    padding: 30px;
+}
+
+.communities-content h1 {
+    margin: 0;
+
+    font-size: 28px;
+}
+
+.communities-content > p {
+    color: #6b7280;
+
+    margin-bottom: 28px;
+}
+
+.communities-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(250px, 1fr));
+
+    gap: 18px;
+}
+
+.community-card {
+    display: flex;
+    flex-direction: column;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    padding: 20px;
+}
+
+.community-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+
+    border-radius: 12px;
+
+    font-size: 22px;
+}
+
+.community-card h2 {
+    margin: 15px 0 7px;
+
+    font-size: 17px;
+}
+
+.community-card p {
+    color: #6b7280;
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    min-height: 40px;
+}
+
+.community-card > span {
+    color: #6b7280;
+
+    font-size: 12px;
+
+    margin-bottom: 17px;
+}
+
+.community-card button {
+    margin-top: auto;
+}

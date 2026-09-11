@@ -1,0 +1,121 @@
+.user-card {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    padding: 18px;
+}
+
+.user-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-card-avatar {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.user-card-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.user-card-info h3 {
+    margin: 0;
+
+    color: #111827;
+    font-size: 15px;
+}
+
+.user-card-info span {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.user-card-role {
+    margin-top: 14px;
+
+    color: #2563eb;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.user-card-skills {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-top: 12px;
+}
+
+.user-card-skills span {
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: #f3f4f6;
+
+    color: #4b5563;
+
+    font-size: 11px;
+}
+
+.user-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 17px;
+    padding-top: 14px;
+
+    border-top: 1px solid #f1f5f9;
+}
+
+.user-card-footer > span {
+    color: #6b7280;
+    font-size: 11px;
+}
+
+.user-card-footer button {
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 7px 13px;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.user-card-footer button:hover {
+    background: #1d4ed8;
+}
+
+.user-card-footer button.following {
+    background: #e5e7eb;
+    color: #374151;
+}

@@ -1,0 +1,146 @@
+.create-startup {
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.create-layout {
+    display: flex;
+}
+
+.create-content {
+    flex: 1;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    padding: 35px;
+}
+
+.create-header {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+.create-header h1 {
+    margin: 0;
+
+    font-size: 28px;
+}
+
+.create-header p {
+    color: #6b7280;
+}
+
+.create-progress {
+    display: flex;
+    justify-content: center;
+
+    gap: 40px;
+
+    margin-bottom: 25px;
+}
+
+.progress-step {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e5e7eb;
+    color: #6b7280;
+
+    font-weight: 700;
+}
+
+.progress-step.active {
+    background: #2563eb;
+    color: white;
+}
+
+.startup-form {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+
+    padding: 30px;
+}
+
+.startup-form h2 {
+    margin-top: 0;
+
+    font-size: 20px;
+}
+
+.startup-form label {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-top: 18px;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.startup-form input,
+.startup-form select,
+.startup-form textarea {
+    padding: 12px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.startup-form textarea {
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+.startup-form input:focus,
+.startup-form select:focus,
+.startup-form textarea:focus {
+    border-color: #2563eb;
+}
+
+.startup-summary {
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background: #f8fafc;
+
+    border-radius: 10px;
+}
+
+.startup-summary h3 {
+    margin-top: 0;
+}
+
+.startup-summary p {
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 30px;
+}
