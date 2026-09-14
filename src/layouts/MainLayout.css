@@ -1,9 +1,6 @@
-
 .main-layout {
     min-height: 100vh;
-
     background: #f8fafc;
-
     color: #111827;
 }
 
@@ -13,7 +10,6 @@
 
 .main-layout-body {
     display: flex;
-
     min-height: calc(100vh - 70px);
 }
 
@@ -23,13 +19,10 @@
 
 .main-layout-content {
     flex: 1;
-
     min-width: 0;
-
+    width: 100%;
     padding: 28px;
-
     box-sizing: border-box;
-
     overflow-x: hidden;
 }
 
@@ -39,9 +32,7 @@
 
 .main-layout-content > * {
     width: 100%;
-
     max-width: 1400px;
-
     margin-left: auto;
     margin-right: auto;
 }
@@ -60,7 +51,6 @@
 
 .main-layout-content::-webkit-scrollbar-thumb {
     background: #cbd5e1;
-
     border-radius: 999px;
 }
 
@@ -73,14 +63,12 @@
 ========================= */
 
 @media (max-width: 900px) {
-
     .main-layout-content {
         padding: 22px;
     }
 }
 
 @media (max-width: 700px) {
-
     .main-layout-body {
         display: block;
     }
@@ -91,106 +79,7 @@
 }
 
 @media (max-width: 500px) {
-
-    .main-layout-content {
-        padding: 14px;
-    }
-}.main-layout {
-    min-height: 100vh;
-
-    background: #f8fafc;
-
-    color: #111827;
-}
-
-/* =========================
-   ÁREA PRINCIPAL
-========================= */
-
-.main-layout-body {
-    display: flex;
-
-    min-height: calc(100vh - 70px);
-}
-
-/* =========================
-   CONTEÚDO
-========================= */
-
-.main-layout-content {
-    flex: 1;
-
-    min-width: 0;
-
-    padding: 28px;
-
-    box-sizing: border-box;
-
-    overflow-x: hidden;
-}
-
-/* =========================
-   CONTAINER INTERNO
-========================= */
-
-.main-layout-content > * {
-    width: 100%;
-
-    max-width: 1400px;
-
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* =========================
-   SCROLLBAR
-========================= */
-
-.main-layout-content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.main-layout-content::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.main-layout-content::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-
-    border-radius: 999px;
-}
-
-.main-layout-content::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* =========================
-   RESPONSIVO
-========================= */
-
-@media (max-width: 900px) {
-
-    .main-layout-content {
-        padding: 22px;
-    }
-}
-
-@media (max-width: 700px) {
-
-    .main-layout-body {
-        display: block;
-    }
-
-    .main-layout-content {
-        padding: 18px;
-    }
-}
-
-@media (max-width: 500px) {
-
     .main-layout-content {
         padding: 14px;
     }
 }
-
-

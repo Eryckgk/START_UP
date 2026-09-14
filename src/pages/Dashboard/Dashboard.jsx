@@ -1,5 +1,3 @@
-import Navbar from "../../components/Navbar/Navbar"
-import Sidebar from "../../components/Sidebar/Sidebar"
 import StartupCard from "../../components/StartupCard/StartupCard"
 import "./Dashboard.css"
 
@@ -8,11 +6,7 @@ function Dashboard() {
     return (
         <div className="dashboard">
 
-            <Navbar user="João" />
-
             <div className="dashboard-layout">
-
-                <Sidebar activePage="dashboard" />
 
                 <main className="dashboard-content">
 

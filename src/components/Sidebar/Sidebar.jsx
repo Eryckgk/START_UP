@@ -1,6 +1,6 @@
 import "./Sidebar.css"
 
-function Sidebar({ activePage = "home", onNavigate }) {
+export default function Sidebar({ activePage = "home", onNavigate }) {
 
     const menuItems = [
         {
@@ -87,4 +87,3 @@ function Sidebar({ activePage = "home", onNavigate }) {
     )
 }
 
-export default Sidebar

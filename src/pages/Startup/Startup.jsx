@@ -1,164 +1,194 @@
-import Navbar from "../../components/Navbar/Navbar"
-import Sidebar from "../../components/Sidebar/Sidebar"
 import UserCard from "../../components/UserCard/UserCard"
 import Button from "../../components/Button/Button"
+
 import "./Startup.css"
 
 function Startup() {
 
     return (
+
         <div className="startup-page">
 
-            <Navbar user="João" />
+            <section className="startup-hero">
 
-            <div className="startup-layout">
+                <div className="startup-big-icon">
+                    🚀
+                </div>
 
-                <Sidebar activePage="startups" />
+                <div className="startup-title">
 
-                <main className="startup-content">
+                    <span>
+                        TECNOLOGIA
+                    </span>
 
-                    <section className="startup-hero">
+                    <h1>
+                        StartTech
+                    </h1>
 
-                        <div className="startup-big-icon">
-                            🚀
-                        </div>
+                    <p>
+                        Soluções tecnológicas simples para
+                        problemas complexos de empresas.
+                    </p>
 
-                        <div className="startup-title">
+                </div>
 
-                            <span>
-                                TECNOLOGIA
-                            </span>
+                <Button>
+                    + Participar
+                </Button>
 
-                            <h1>StartTech</h1>
+            </section>
 
-                            <p>
-                                Soluções tecnológicas simples para
-                                problemas complexos de empresas.
-                            </p>
+            <div className="startup-grid">
 
-                        </div>
+                <div>
 
-                        <Button>
-                            + Participar
-                        </Button>
+                    <section className="startup-box">
+
+                        <h2>
+                            Sobre a startup
+                        </h2>
+
+                        <p>
+                            A StartTech nasceu com o objetivo
+                            de ajudar pequenas empresas a
+                            automatizar processos utilizando
+                            tecnologia acessível.
+                        </p>
 
                     </section>
 
-                    <div className="startup-grid">
+                    <section className="startup-box">
 
-                        <div>
+                        <h2>
+                            Problema
+                        </h2>
 
-                            <section className="startup-box">
+                        <p>
+                            Pequenos negócios possuem
+                            processos manuais que consomem
+                            tempo e dinheiro.
+                        </p>
 
-                                <h2>Sobre a startup</h2>
+                    </section>
 
-                                <p>
-                                    A StartTech nasceu com o objetivo
-                                    de ajudar pequenas empresas a
-                                    automatizar processos utilizando
-                                    tecnologia acessível.
-                                </p>
+                    <section className="startup-box">
 
-                            </section>
+                        <h2>
+                            Solução
+                        </h2>
 
-                            <section className="startup-box">
+                        <p>
+                            Uma plataforma simples para
+                            automatizar tarefas repetitivas
+                            e acompanhar os resultados.
+                        </p>
 
-                                <h2>Problema</h2>
+                    </section>
 
-                                <p>
-                                    Pequenos negócios possuem
-                                    processos manuais que consomem
-                                    tempo e dinheiro.
-                                </p>
+                    <section className="startup-box">
 
-                            </section>
+                        <h2>
+                            Roadmap
+                        </h2>
 
-                            <section className="startup-box">
+                        <div className="roadmap">
 
-                                <h2>Solução</h2>
+                            <div className="roadmap-item done">
 
-                                <p>
-                                    Uma plataforma simples para
-                                    automatizar tarefas repetitivas
-                                    e acompanhar os resultados.
-                                </p>
+                                <strong>
+                                    Ideia
+                                </strong>
 
-                            </section>
-
-                            <section className="startup-box">
-
-                                <h2>Roadmap</h2>
-
-                                <div className="roadmap">
-
-                                    <div className="roadmap-item done">
-                                        <strong>Ideia</strong>
-                                        <span>Concluído</span>
-                                    </div>
-
-                                    <div className="roadmap-item done">
-                                        <strong>Validação</strong>
-                                        <span>Concluído</span>
-                                    </div>
-
-                                    <div className="roadmap-item active">
-                                        <strong>MVP</strong>
-                                        <span>Em andamento</span>
-                                    </div>
-
-                                    <div className="roadmap-item">
-                                        <strong>Lançamento</strong>
-                                        <span>Pendente</span>
-                                    </div>
-
-                                </div>
-
-                            </section>
-
-                        </div>
-
-                        <aside>
-
-                            <div className="startup-box">
-
-                                <h2>Equipe</h2>
-
-                                <UserCard
-                                    name="João Carlos"
-                                    username="@joaocarlos"
-                                    role="Founder"
-                                    skills={[
-                                        "React",
-                                        "Node.js"
-                                    ]}
-                                    followers={128}
-                                />
-
-                                <br />
-
-                                <UserCard
-                                    name="Ana Silva"
-                                    username="@anasilva"
-                                    role="Product Designer"
-                                    skills={[
-                                        "UI",
-                                        "UX"
-                                    ]}
-                                    followers={310}
-                                />
+                                <span>
+                                    Concluído
+                                </span>
 
                             </div>
 
-                        </aside>
+                            <div className="roadmap-item done">
+
+                                <strong>
+                                    Validação
+                                </strong>
+
+                                <span>
+                                    Concluído
+                                </span>
+
+                            </div>
+
+                            <div className="roadmap-item active">
+
+                                <strong>
+                                    MVP
+                                </strong>
+
+                                <span>
+                                    Em andamento
+                                </span>
+
+                            </div>
+
+                            <div className="roadmap-item">
+
+                                <strong>
+                                    Lançamento
+                                </strong>
+
+                                <span>
+                                    Pendente
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <aside>
+
+                    <div className="startup-box">
+
+                        <h2>
+                            Equipe
+                        </h2>
+
+                        <UserCard
+                            name="João Carlos"
+                            username="@joaocarlos"
+                            role="Founder"
+                            skills={[
+                                "React",
+                                "Node.js"
+                            ]}
+                            followers={128}
+                        />
+
+                        <br />
+
+                        <UserCard
+                            name="Ana Silva"
+                            username="@anasilva"
+                            role="Product Designer"
+                            skills={[
+                                "UI",
+                                "UX"
+                            ]}
+                            followers={310}
+                        />
 
                     </div>
 
-                </main>
+                </aside>
 
             </div>
 
         </div>
+
     )
+
 }
 
 export default Startup

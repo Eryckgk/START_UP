@@ -1,22 +1,12 @@
 .startup-page {
-    min-height: 100vh;
-    background: #f8fafc;
-}
-
-.startup-layout {
-    display: flex;
-}
-
-.startup-content {
-    flex: 1;
-
+    min-height: 100%;
     padding: 30px;
+    background: #f8fafc;
 }
 
 .startup-hero {
     display: flex;
     align-items: center;
-
     gap: 18px;
 
     background: white;
@@ -25,7 +15,6 @@
     border-radius: 15px;
 
     padding: 25px;
-
     margin-bottom: 22px;
 }
 
@@ -141,12 +130,8 @@
     }
 
 }
-
-@media (max-width: 650px) {
-
     .startup-hero {
         align-items: flex-start;
         flex-direction: column;
     }
 
-}
