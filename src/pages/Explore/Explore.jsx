@@ -1,8 +1,8 @@
 import { useState } from "react"
-import Navbar from "../../components/Navbar/Navbar"
-import Sidebar from "../../components/Sidebar/Sidebar"
+
 import StartupCard from "../../components/StartupCard/StartupCard"
 import UserCard from "../../components/UserCard/UserCard"
+
 import "./Explore.css"
 
 function Explore() {
@@ -57,86 +57,66 @@ function Explore() {
     return (
         <div className="explore">
 
-            <Navbar onSearch={setSearch} />
+            <h1>Explorar</h1>
 
-            <div className="explore-layout">
+            <p className="explore-subtitle">
+                Descubra startups, pessoas e oportunidades.
+            </p>
 
-                <Sidebar activePage="explore" />
+            <div className="explore-tabs">
 
-                <main className="explore-content">
+                <button
+                    className={
+                        filter === "startups"
+                            ? "active"
+                            : ""
+                    }
+                    onClick={() => setFilter("startups")}
+                >
+                    🚀 Startups
+                </button>
 
-                    <h1>Explorar</h1>
-
-                    <p className="explore-subtitle">
-                        Descubra startups, pessoas e oportunidades.
-                    </p>
-
-                    <div className="explore-tabs">
-
-                        <button
-                            className={
-                                filter === "startups"
-                                    ? "active"
-                                    : ""
-                            }
-                            onClick={() => setFilter("startups")}
-                        >
-                            🚀 Startups
-                        </button>
-
-                        <button
-                            className={
-                                filter === "people"
-                                    ? "active"
-                                    : ""
-                            }
-                            onClick={() => setFilter("people")}
-                        >
-                            👥 Pessoas
-                        </button>
-
-                    </div>
-
-                    {search && (
-                        <div className="explore-search">
-                            Resultados para:
-                            <strong> "{search}"</strong>
-                        </div>
-                    )}
-
-                    {filter === "startups" && (
-
-                        <div className="explore-grid">
-
-                            {startups.map((startup) => (
-                                <StartupCard
-                                    key={startup.name}
-                                    {...startup}
-                                />
-                            ))}
-
-                        </div>
-
-                    )}
-
-                    {filter === "people" && (
-
-                        <div className="explore-users">
-
-                            {users.map((user) => (
-                                <UserCard
-                                    key={user.username}
-                                    {...user}
-                                />
-                            ))}
-
-                        </div>
-
-                    )}
-
-                </main>
+                <button
+                    className={
+                        filter === "people"
+                            ? "active"
+                            : ""
+                    }
+                    onClick={() => setFilter("people")}
+                >
+                    👥 Pessoas
+                </button>
 
             </div>
+
+            {search && (
+                <div className="explore-search">
+                    Resultados para:
+                    <strong> "{search}"</strong>
+                </div>
+            )}
+
+            {filter === "startups" && (
+                <div className="explore-grid">
+                    {startups.map((startup) => (
+                        <StartupCard
+                            key={startup.name}
+                            {...startup}
+                        />
+                    ))}
+                </div>
+            )}
+
+            {filter === "people" && (
+                <div className="explore-users">
+                    {users.map((user) => (
+                        <UserCard
+                            key={user.username}
+                            {...user}
+                        />
+                    ))}
+                </div>
+            )}
 
         </div>
     )

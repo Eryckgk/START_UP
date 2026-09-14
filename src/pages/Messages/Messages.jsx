@@ -1,6 +1,4 @@
 import { useState } from "react"
-import Navbar from "../../components/Navbar/Navbar"
-import Sidebar from "../../components/Sidebar/Sidebar"
 import "./Messages.css"
 
 function Messages() {
@@ -58,11 +56,7 @@ function Messages() {
     return (
         <div className="messages">
 
-            <Navbar />
-
             <div className="messages-layout">
-
-                <Sidebar activePage="messages" />
 
                 <main className="messages-content">
 

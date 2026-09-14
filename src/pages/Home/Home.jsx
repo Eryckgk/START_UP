@@ -1,9 +1,9 @@
 import { useState } from "react"
-import Navbar from "../../components/Navbar/Navbar"
-import Sidebar from "../../components/Sidebar/Sidebar"
+
 import Post from "../../components/Post/Post"
 import StartupCard from "../../components/StartupCard/StartupCard"
 import UserCard from "../../components/UserCard/UserCard"
+
 import "./Home.css"
 
 function Home() {
@@ -54,95 +54,77 @@ function Home() {
 
     return (
         <div className="home">
+            <section className="home-welcome">
+                <div>
+                    <h1>Olá, João! 👋</h1>
+                    <p>
+                        O que você vai construir hoje?
+                    </p>
+                </div>
 
-            <Navbar
-                user="João"
-                onSearch={setSearch}
-            />
+                {search && (
+                    <span>
+                        Pesquisando por: "{search}"
+                    </span>
+                )}
+            </section>
 
-            <div className="home-layout">
+            <section className="home-feed">
 
-                <Sidebar />
+                <div className="home-main">
 
-                <main className="home-content">
+                    <div className="section-title">
+                        <h2>Seu feed</h2>
+                    </div>
 
-                    <section className="home-welcome">
-                        <div>
-                            <h1>Olá, João! 👋</h1>
+                    {posts.map((post, index) => (
+                        <Post
+                            key={index}
+                            {...post}
+                        />
+                    ))}
 
-                            <p>
-                                O que você vai construir hoje?
-                            </p>
-                        </div>
+                </div>
 
-                        {search && (
-                            <span>
-                                Pesquisando por: "{search}"
-                            </span>
-                        )}
-                    </section>
+                <aside className="home-right">
 
-                    <section className="home-feed">
+                    <div className="home-widget">
 
-                        <div className="home-main">
+                        <h3>
+                            🚀 Startups em destaque
+                        </h3>
 
-                            <div className="section-title">
-                                <h2>Seu feed</h2>
-                            </div>
+                        {startups.map((startup) => (
+                            <StartupCard
+                                key={startup.name}
+                                {...startup}
+                            />
+                        ))}
 
-                            {posts.map((post, index) => (
-                                <Post
-                                    key={index}
-                                    {...post}
-                                />
-                            ))}
+                    </div>
 
-                        </div>
+                    <div className="home-widget">
 
-                        <aside className="home-right">
+                        <h3>
+                            👥 Pessoas para conhecer
+                        </h3>
 
-                            <div className="home-widget">
+                        <UserCard
+                            name="Lucas Santos"
+                            username="@lucasdev"
+                            role="Desenvolvedor Full Stack"
+                            skills={[
+                                "React",
+                                "Node.js"
+                            ]}
+                            followers={320}
+                        />
 
-                                <h3>
-                                    🚀 Startups em destaque
-                                </h3>
+                    </div>
 
-                                {startups.map((startup) => (
-                                    <StartupCard
-                                        key={startup.name}
-                                        {...startup}
-                                    />
-                                ))}
+                </aside>
 
-                            </div>
-
-                            <div className="home-widget">
-
-                                <h3>
-                                    👥 Pessoas para conhecer
-                                </h3>
-
-                                <UserCard
-                                    name="Lucas Santos"
-                                    username="@lucasdev"
-                                    role="Desenvolvedor Full Stack"
-                                    skills={[
-                                        "React",
-                                        "Node.js"
-                                    ]}
-                                    followers={320}
-                                />
-
-                            </div>
-
-                        </aside>
-
-                    </section>
-
-                </main>
-
-            </div>
-
+            </section>
         </div>
     )
 }

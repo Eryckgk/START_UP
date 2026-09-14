@@ -1,6 +1,4 @@
 import { useState } from "react"
-import Navbar from "../../components/Navbar/Navbar"
-import Sidebar from "../../components/Sidebar/Sidebar"
 import Button from "../../components/Button/Button"
 import "./Communities.css"
 
@@ -54,11 +52,9 @@ function Communities() {
     return (
         <div className="communities">
 
-            <Navbar />
 
             <div className="communities-layout">
 
-                <Sidebar activePage="communities" />
 
                 <main className="communities-content">
 
