@@ -1,13 +1,171 @@
-import UserCard from "../../components/UserCard/UserCard"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+
 import Button from "../../components/Button/Button"
+
+import { supabase } from "../../services/supabase"
 
 import "./Startup.css"
 
+const stages = [
+    "Ideia",
+    "Validação",
+    "MVP",
+    "Lançamento",
+    "Crescimento"
+]
+
 function Startup() {
+
+    const { id } = useParams()
+
+    const navigate = useNavigate()
+
+    const [startup, setStartup] = useState(null)
+
+    const [goals, setGoals] = useState([])
+
+    const [loading, setLoading] = useState(true)
+
+    const [error, setError] = useState("")
+
+    async function loadStartup() {
+
+        try {
+
+            setLoading(true)
+
+            setError("")
+
+            // BUSCAR STARTUP
+            const {
+                data: startupData,
+                error: startupError
+            } = await supabase
+                .from("startups")
+                .select("*")
+                .eq("id", id)
+                .single()
+
+            if (startupError) {
+                throw startupError
+            }
+
+            // BUSCAR METAS
+            const {
+                data: goalsData,
+                error: goalsError
+            } = await supabase
+                .from("startup_goals")
+                .select("*")
+                .eq("startup_id", id)
+                .eq("stage", startupData.stage)
+                .order("created_at", {
+                    ascending: true
+                })
+
+            if (goalsError) {
+                throw goalsError
+            }
+
+            setStartup(startupData)
+
+            setGoals(goalsData || [])
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao carregar startup:",
+                error
+            )
+
+            setError(
+                "Não foi possível carregar essa startup."
+            )
+
+        } finally {
+
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+
+        loadStartup()
+
+    }, [id])
+
+    if (loading) {
+
+        return (
+            <div className="startup-page">
+
+                <div className="startup-box">
+
+                    <h2>
+                        🚀 Carregando startup...
+                    </h2>
+
+                </div>
+
+            </div>
+        )
+    }
+
+    if (error || !startup) {
+
+        return (
+            <div className="startup-page">
+
+                <div className="startup-box">
+
+                    <h2>
+                        😕 Startup não encontrada
+                    </h2>
+
+                    <p>
+                        {error}
+                    </p>
+
+                    <Button
+                        onClick={() =>
+                            navigate("/startups")
+                        }
+                    >
+                        ← Voltar
+                    </Button>
+
+                </div>
+
+            </div>
+        )
+    }
+
+    const currentStageIndex =
+        stages.indexOf(startup.stage)
+
+    const completedGoals =
+        goals.filter(
+            (goal) => goal.completed
+        ).length
+
+    const totalGoals =
+        goals.length
+
+    const progress =
+        totalGoals === 0
+            ? 0
+            : Math.round(
+                  (completedGoals /
+                      totalGoals) *
+                      100
+              )
 
     return (
 
         <div className="startup-page">
+
+            {/* HERO */}
 
             <section className="startup-hero">
 
@@ -18,22 +176,27 @@ function Startup() {
                 <div className="startup-title">
 
                     <span>
-                        TECNOLOGIA
+                        {startup.category}
                     </span>
 
                     <h1>
-                        StartTech
+                        {startup.name}
                     </h1>
 
                     <p>
-                        Soluções tecnológicas simples para
-                        problemas complexos de empresas.
+                        {startup.solution}
                     </p>
 
                 </div>
 
-                <Button>
-                    + Participar
+                <Button
+                    onClick={() =>
+                        navigate(
+                            `/startups/${startup.id}/details`
+                        )
+                    }
+                >
+                    ⚙️ Gerenciar
                 </Button>
 
             </section>
@@ -42,6 +205,8 @@ function Startup() {
 
                 <div>
 
+                    {/* SOBRE */}
+
                     <section className="startup-box">
 
                         <h2>
@@ -49,13 +214,12 @@ function Startup() {
                         </h2>
 
                         <p>
-                            A StartTech nasceu com o objetivo
-                            de ajudar pequenas empresas a
-                            automatizar processos utilizando
-                            tecnologia acessível.
+                            {startup.solution}
                         </p>
 
                     </section>
+
+                    {/* PROBLEMA */}
 
                     <section className="startup-box">
 
@@ -64,26 +228,40 @@ function Startup() {
                         </h2>
 
                         <p>
-                            Pequenos negócios possuem
-                            processos manuais que consomem
-                            tempo e dinheiro.
+                            {startup.problem}
                         </p>
 
                     </section>
+
+                    {/* PÚBLICO */}
 
                     <section className="startup-box">
 
                         <h2>
-                            Solução
+                            Público-alvo
                         </h2>
 
                         <p>
-                            Uma plataforma simples para
-                            automatizar tarefas repetitivas
-                            e acompanhar os resultados.
+                            {startup.audience}
                         </p>
 
                     </section>
+
+                    {/* MODELO DE NEGÓCIO */}
+
+                    <section className="startup-box">
+
+                        <h2>
+                            Modelo de negócio
+                        </h2>
+
+                        <p>
+                            {startup.business_model}
+                        </p>
+
+                    </section>
+
+                    {/* ROADMAP */}
 
                     <section className="startup-box">
 
@@ -93,53 +271,133 @@ function Startup() {
 
                         <div className="roadmap">
 
-                            <div className="roadmap-item done">
+                            {stages.map(
+                                (stage, index) => {
 
-                                <strong>
-                                    Ideia
-                                </strong>
+                                    const completed =
+                                        index <
+                                        currentStageIndex
+
+                                    const active =
+                                        index ===
+                                        currentStageIndex
+
+                                    return (
+
+                                        <div
+                                            key={stage}
+                                            className={
+                                                `roadmap-item ${
+                                                    completed
+                                                        ? "done"
+                                                        : ""
+                                                } ${
+                                                    active
+                                                        ? "active"
+                                                        : ""
+                                                }`
+                                            }
+                                        >
+
+                                            <strong>
+                                                {stage}
+                                            </strong>
+
+                                            <span>
+
+                                                {completed
+                                                    ? "Concluído"
+                                                    : active
+                                                    ? "Em andamento"
+                                                    : "Pendente"}
+
+                                            </span>
+
+                                        </div>
+
+                                    )
+                                }
+                            )}
+
+                        </div>
+
+                    </section>
+
+                    {/* METAS */}
+
+                    <section className="startup-box">
+
+                        <div className="startup-goals-header">
+
+                            <div>
+
+                                <h2>
+                                    🎯 Metas
+                                </h2>
 
                                 <span>
-                                    Concluído
+                                    {completedGoals} de{" "}
+                                    {totalGoals}
                                 </span>
 
                             </div>
 
-                            <div className="roadmap-item done">
+                            <strong>
+                                {progress}%
+                            </strong>
 
-                                <strong>
-                                    Validação
-                                </strong>
+                        </div>
 
-                                <span>
-                                    Concluído
-                                </span>
+                        <div className="startup-progress">
 
-                            </div>
+                            <div
+                                style={{
+                                    width: `${progress}%`
+                                }}
+                            />
 
-                            <div className="roadmap-item active">
+                        </div>
 
-                                <strong>
-                                    MVP
-                                </strong>
+                        <div className="startup-goals">
 
-                                <span>
-                                    Em andamento
-                                </span>
+                            {goals.map(
+                                (goal) => (
 
-                            </div>
+                                    <div
+                                        key={goal.id}
+                                        className={
+                                            goal.completed
+                                                ? "goal completed"
+                                                : "goal"
+                                        }
+                                    >
 
-                            <div className="roadmap-item">
+                                        <span>
 
-                                <strong>
-                                    Lançamento
-                                </strong>
+                                            {goal.completed
+                                                ? "✓"
+                                                : "○"}
 
-                                <span>
-                                    Pendente
-                                </span>
+                                        </span>
 
-                            </div>
+                                        <div>
+
+                                            <strong>
+                                                {goal.title}
+                                            </strong>
+
+                                            <p>
+                                                {
+                                                    goal.description
+                                                }
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                )
+                            )}
 
                         </div>
 
@@ -147,48 +405,10 @@ function Startup() {
 
                 </div>
 
-                <aside>
-
-                    <div className="startup-box">
-
-                        <h2>
-                            Equipe
-                        </h2>
-
-                        <UserCard
-                            name="João Carlos"
-                            username="@joaocarlos"
-                            role="Founder"
-                            skills={[
-                                "React",
-                                "Node.js"
-                            ]}
-                            followers={128}
-                        />
-
-                        <br />
-
-                        <UserCard
-                            name="Ana Silva"
-                            username="@anasilva"
-                            role="Product Designer"
-                            skills={[
-                                "UI",
-                                "UX"
-                            ]}
-                            followers={310}
-                        />
-
-                    </div>
-
-                </aside>
-
             </div>
 
         </div>
-
     )
-
 }
 
 export default Startup

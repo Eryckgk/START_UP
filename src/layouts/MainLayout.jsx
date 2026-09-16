@@ -1,13 +1,18 @@
-
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
+
 import Navbar from "../components/Navbar/Navbar"
 import Sidebar from "../components/Sidebar/Sidebar"
+
+import useAuth from "../hooks/useAuth"
+
 import "./MainLayout.css"
 
 function MainLayout() {
 
     const navigate = useNavigate()
     const location = useLocation()
+
+    const { user } = useAuth()
 
     function handleNavigate(page) {
 
@@ -67,7 +72,7 @@ function MainLayout() {
         <div className="main-layout">
 
             <Navbar
-                user="João"
+                user={user?.name || "Usuário"}
                 onSearch={(value) => {
                     console.log("Pesquisar:", value)
                 }}
@@ -91,4 +96,3 @@ function MainLayout() {
 }
 
 export default MainLayout
-

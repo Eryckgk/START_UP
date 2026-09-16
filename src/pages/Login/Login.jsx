@@ -1,14 +1,20 @@
+
 import { useState } from "react"
+
 import { Link, useNavigate } from "react-router-dom"
 
 import Button from "../../components/Button/Button"
+
 import useAuth from "../../hooks/useAuth"
+
+import { login } from "../../services/auth"
 
 import "./Login.css"
 
 function Login() {
 
     const navigate = useNavigate()
+
     const { setUser } = useAuth()
 
     const [email, setEmail] = useState("")
@@ -17,7 +23,7 @@ function Login() {
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
 
         event.preventDefault()
 
@@ -39,57 +45,20 @@ function Login() {
 
         try {
 
-            const savedUsers =
-                localStorage.getItem("startup_users")
-
-            const users = savedUsers
-                ? JSON.parse(savedUsers)
-                : []
-
-            const user = users.find(
-                (item) =>
-                    item.email?.toLowerCase() === emailClean &&
-                    item.password === password
+            const user = await login(
+                emailClean,
+                password
             )
 
             if (!user) {
-
-                setError(
-                    "E-mail ou senha incorretos."
-                )
-
-                setLoading(false)
-
+                setError("E-mail ou senha incorretos.")
                 return
             }
 
-            /* =========================
-               CRIA SESSÃO
-            ========================= */
-
-            const token =
-                `startup-${user.id}-${Date.now()}`
-
-            localStorage.setItem(
-                "startup_token",
-                token
-            )
-
-            localStorage.setItem(
-                "startup_user",
-                JSON.stringify(user)
-            )
-
-            /* =========================
-               ATUALIZA CONTEXTO
-            ========================= */
-
+            // Atualiza o AuthContext
             setUser(user)
 
-            /* =========================
-               VAI PARA HOME
-            ========================= */
-
+            // Vai para a Home
             navigate("/", {
                 replace: true
             })
@@ -102,16 +71,19 @@ function Login() {
             )
 
             setError(
+                error.message ||
                 "Não foi possível realizar o login."
             )
 
         } finally {
 
             setLoading(false)
+
         }
     }
 
     return (
+
         <div className="login-container">
 
             <div className="login-card">
@@ -133,9 +105,11 @@ function Login() {
                 </div>
 
                 {error && (
+
                     <div className="login-message login-error">
                         {error}
                     </div>
+
                 )}
 
                 <form
@@ -240,3 +214,4 @@ function Login() {
 }
 
 export default Login
+

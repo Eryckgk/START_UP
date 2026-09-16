@@ -1,46 +1,20 @@
 
-import api from "./api"
+import { supabase } from "./supabase"
 
-/* =========================
-   STORAGE
-========================= */
 
-const TOKEN_KEY = "startup_token"
-const USER_KEY = "startup_user"
-
-/* =========================
-   LOGIN
-========================= */
+// =========================
+// LOGIN
+// =========================
 
 export async function login(email, password) {
 
-    try {
+    const { data, error } =
+        await supabase.auth.signInWithPassword({
+            email,
+            password
+        })
 
-        const response = await api.post(
-            "/auth/login",
-            {
-                email,
-                password
-            }
-        )
-
-        if (response.token) {
-            localStorage.setItem(
-                TOKEN_KEY,
-                response.token
-            )
-        }
-
-        if (response.user) {
-            localStorage.setItem(
-                USER_KEY,
-                JSON.stringify(response.user)
-            )
-        }
-
-        return response
-
-    } catch (error) {
+    if (error) {
 
         console.error(
             "Erro ao fazer login:",
@@ -49,24 +23,33 @@ export async function login(email, password) {
 
         throw error
     }
+
+    return data.user
 }
 
-/* =========================
-   REGISTRO
-========================= */
+
+// =========================
+// REGISTRO
+// =========================
 
 export async function register(userData) {
 
-    try {
+    const {
+        email,
+        password,
+        ...profileData
+    } = userData
 
-        const response = await api.post(
-            "/auth/register",
-            userData
-        )
+    const { data, error } =
+        await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: profileData
+            }
+        })
 
-        return response
-
-    } catch (error) {
+    if (error) {
 
         console.error(
             "Erro ao cadastrar usuário:",
@@ -75,108 +58,120 @@ export async function register(userData) {
 
         throw error
     }
+
+    return data.user
 }
 
-/* =========================
-   LOGOUT
-========================= */
 
-export function logout() {
+// =========================
+// LOGOUT
+// =========================
 
-    localStorage.removeItem(
-        TOKEN_KEY
-    )
+export async function logout() {
 
-    localStorage.removeItem(
-        USER_KEY
-    )
-}
+    const { error } =
+        await supabase.auth.signOut()
 
-/* =========================
-   TOKEN
-========================= */
-
-export function getToken() {
-
-    return localStorage.getItem(
-        TOKEN_KEY
-    )
-}
-
-/* =========================
-   USUÁRIO ATUAL
-========================= */
-
-export function getCurrentUser() {
-
-    const user = localStorage.getItem(
-        USER_KEY
-    )
-
-    if (!user) {
-        return null
-    }
-
-    try {
-
-        return JSON.parse(user)
-
-    } catch (error) {
+    if (error) {
 
         console.error(
-            "Erro ao recuperar usuário:",
-            error
-        )
-
-        return null
-    }
-}
-
-/* =========================
-   AUTENTICAÇÃO
-========================= */
-
-export function isAuthenticated() {
-
-    return Boolean(
-        getToken()
-    )
-}
-
-/* =========================
-   ATUALIZAR USUÁRIO
-========================= */
-
-export function updateCurrentUser(user) {
-
-    localStorage.setItem(
-        USER_KEY,
-        JSON.stringify(user)
-    )
-
-    return user
-}
-
-/* =========================
-   BUSCAR PERFIL
-========================= */
-
-export async function getProfile() {
-
-    try {
-
-        return await api.get(
-            "/auth/me"
-        )
-
-    } catch (error) {
-
-        console.error(
-            "Erro ao buscar perfil:",
+            "Erro ao fazer logout:",
             error
         )
 
         throw error
     }
+}
+
+
+// =========================
+// TOKEN
+// =========================
+
+export async function getToken() {
+
+    const {
+        data: { session }
+    } = await supabase.auth.getSession()
+
+    return session?.access_token || null
+}
+
+
+// =========================
+// USUÁRIO ATUAL
+// =========================
+
+export async function getCurrentUser() {
+
+    const {
+        data: { user },
+        error
+    } = await supabase.auth.getUser()
+
+    if (error) {
+        return null
+    }
+
+    return user
+}
+
+
+// =========================
+// AUTENTICAÇÃO
+// =========================
+
+export async function isAuthenticated() {
+
+    const {
+        data: { session }
+    } = await supabase.auth.getSession()
+
+    return Boolean(session)
+}
+
+
+// =========================
+// ATUALIZAR USUÁRIO
+// =========================
+
+export async function updateCurrentUser(userData) {
+
+    const {
+        data,
+        error
+    } = await supabase.auth.updateUser({
+        data: userData
+    })
+
+    if (error) {
+
+        console.error(
+            "Erro ao atualizar usuário:",
+            error
+        )
+
+        throw error
+    }
+
+    return data.user
+}
+
+
+// =========================
+// BUSCAR PERFIL
+// =========================
+
+export async function getProfile() {
+
+    const user = await getCurrentUser()
+
+    if (!user) {
+        throw new Error(
+            "Usuário não autenticado."
+        )
+    }
+
+    return user
 }
 

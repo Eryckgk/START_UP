@@ -1,75 +1,93 @@
-
 import { createContext, useEffect, useState } from "react"
-import {
-    login as loginService,
-    register as registerService,
-    logout as logoutService,
-    getCurrentUser,
-    isAuthenticated
-} from "../services/auth"
+
+import { supabase } from "../services/supabase"
 
 export const AuthContext = createContext(null)
 
 function AuthProvider({ children }) {
-
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        async function loadSession() {
+            const {
+                data: { session }
+            } = await supabase.auth.getSession()
 
-        const savedUser = getCurrentUser()
-
-        if (savedUser && isAuthenticated()) {
-            setUser(savedUser)
+            setUser(session?.user ?? null)
+            setLoading(false)
         }
 
-        setLoading(false)
+        loadSession()
 
+        const {
+            data: { subscription }
+        } = supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                setUser(session?.user ?? null)
+            }
+        )
+
+        return () => {
+            subscription.unsubscribe()
+        }
     }, [])
 
     async function login(email, password) {
-
         setLoading(true)
 
         try {
+            const { data, error } =
+                await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                })
 
-            const response = await loginService(
-                email,
-                password
-            )
+            if (error) {
+                throw error
+            }
 
-            const loggedUser =
-                response?.user || getCurrentUser()
+            setUser(data.user)
 
-            setUser(loggedUser)
-
-            return response
-
+            return data
         } finally {
             setLoading(false)
         }
     }
 
     async function register(userData) {
-
         setLoading(true)
 
         try {
+            const {
+                email,
+                password,
+                ...metadata
+            } = userData
 
-            const response =
-                await registerService(userData)
+            const { data, error } =
+                await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: metadata
+                    }
+                })
 
-            return response
+            if (error) {
+                throw error
+            }
 
+            setUser(data.user ?? null)
+
+            return data
         } finally {
             setLoading(false)
         }
     }
 
-    function logout() {
-
-        logoutService()
-
+    async function logout() {
+        await supabase.auth.signOut()
         setUser(null)
     }
 
@@ -91,4 +109,3 @@ function AuthProvider({ children }) {
 }
 
 export default AuthProvider
-
