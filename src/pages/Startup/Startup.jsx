@@ -1,35 +1,168 @@
-import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+
+import {
+    useEffect,
+    useState
+} from "react"
+
+import {
+    useNavigate,
+    useParams
+} from "react-router-dom"
 
 import Button from "../../components/Button/Button"
+
+import useAuth from "../../hooks/useAuth"
 
 import { supabase } from "../../services/supabase"
 
 import "./Startup.css"
 
+
 const stages = [
+
     "Ideia",
     "Validação",
     "MVP",
     "Lançamento",
     "Crescimento"
+
 ]
+
+
+const stageGoals = {
+
+    Ideia: [
+        {
+            title: "Definir o problema",
+            description:
+                "Descrever claramente qual problema sua startup resolve."
+        },
+        {
+            title: "Definir o público-alvo",
+            description:
+                "Identificar quem possui esse problema."
+        },
+        {
+            title: "Definir a solução",
+            description:
+                "Explicar como sua startup resolve o problema."
+        }
+    ],
+
+    Validação: [
+        {
+            title: "Conversar com usuários",
+            description:
+                "Entrevistar pessoas que fazem parte do público-alvo."
+        },
+        {
+            title: "Validar o problema",
+            description:
+                "Descobrir se o problema realmente existe e é relevante."
+        },
+        {
+            title: "Validar a solução",
+            description:
+                "Verificar se os usuários demonstram interesse na solução."
+        }
+    ],
+
+    MVP: [
+        {
+            title: "Criar o protótipo",
+            description:
+                "Criar a primeira versão funcional do produto."
+        },
+        {
+            title: "Implementar a funcionalidade principal",
+            description:
+                "Desenvolver aquilo que realmente resolve o problema."
+        },
+        {
+            title: "Testar com usuários",
+            description:
+                "Colocar o MVP nas mãos de usuários reais."
+        }
+    ],
+
+    Lançamento: [
+        {
+            title: "Publicar o produto",
+            description:
+                "Disponibilizar o produto para usuários."
+        },
+        {
+            title: "Conseguir os primeiros usuários",
+            description:
+                "Atrair os primeiros usuários reais."
+        },
+        {
+            title: "Coletar feedback",
+            description:
+                "Registrar problemas, sugestões e necessidades."
+        }
+    ],
+
+    Crescimento: [
+        {
+            title: "Aumentar usuários ativos",
+            description:
+                "Criar estratégias para aumentar a utilização do produto."
+        },
+        {
+            title: "Melhorar retenção",
+            description:
+                "Fazer com que os usuários continuem utilizando o produto."
+        },
+        {
+            title: "Aumentar receita",
+            description:
+                "Criar estratégias para tornar o negócio sustentável."
+        }
+    ]
+
+}
+
 
 function Startup() {
 
-    const { id } = useParams()
+    const {
+        id
+    } = useParams()
 
     const navigate = useNavigate()
 
-    const [startup, setStartup] = useState(null)
+    const {
+        user,
+        loading: authLoading
+    } = useAuth()
 
-    const [goals, setGoals] = useState([])
 
-    const [loading, setLoading] = useState(true)
+    const [startups, setStartups] =
+        useState([])
 
-    const [error, setError] = useState("")
+    const [startup, setStartup] =
+        useState(null)
 
-    async function loadStartup() {
+    const [goals, setGoals] =
+        useState([])
+
+    const [loading, setLoading] =
+        useState(true)
+
+    const [error, setError] =
+        useState("")
+
+
+    // ==========================================
+    // LISTAR STARTUPS
+    // ==========================================
+
+    async function loadStartups() {
+
+        if (!user) {
+            return
+        }
 
         try {
 
@@ -37,40 +170,136 @@ function Startup() {
 
             setError("")
 
-            // BUSCAR STARTUP
+
+            const {
+                data,
+                error
+            } = await supabase
+
+                .from("startups")
+
+                .select("*")
+
+                .eq("user_id", user.id)
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+
+
+            if (error) {
+                throw error
+            }
+
+
+            setStartups(data || [])
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao carregar startups:",
+                error
+            )
+
+            setError(
+                "Não foi possível carregar suas startups."
+            )
+
+        } finally {
+
+            setLoading(false)
+
+        }
+
+    }
+
+
+    // ==========================================
+    // CARREGAR STARTUP
+    // ==========================================
+
+    async function loadStartup() {
+
+        if (!id) {
+            return
+        }
+
+        try {
+
+            setLoading(true)
+
+            setError("")
+
+
+            // --------------------------
+            // STARTUP
+            // --------------------------
+
             const {
                 data: startupData,
                 error: startupError
             } = await supabase
+
                 .from("startups")
+
                 .select("*")
+
                 .eq("id", id)
+
                 .single()
+
 
             if (startupError) {
                 throw startupError
             }
 
-            // BUSCAR METAS
+
+            // --------------------------
+            // METAS
+            // --------------------------
+
             const {
                 data: goalsData,
                 error: goalsError
             } = await supabase
+
                 .from("startup_goals")
+
                 .select("*")
-                .eq("startup_id", id)
-                .eq("stage", startupData.stage)
-                .order("created_at", {
-                    ascending: true
-                })
+
+                .eq(
+                    "startup_id",
+                    id
+                )
+
+                .eq(
+                    "stage",
+                    startupData.stage
+                )
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: true
+                    }
+                )
+
 
             if (goalsError) {
                 throw goalsError
             }
 
-            setStartup(startupData)
 
-            setGoals(goalsData || [])
+            setStartup(
+                startupData
+            )
+
+            setGoals(
+                goalsData || []
+            )
 
         } catch (error) {
 
@@ -86,35 +315,232 @@ function Startup() {
         } finally {
 
             setLoading(false)
+
         }
+
     }
+
+
+    // ==========================================
+    // EFFECT
+    // ==========================================
 
     useEffect(() => {
 
-        loadStartup()
+        if (authLoading) {
+            return
+        }
 
-    }, [id])
+        if (!user) {
 
-    if (loading) {
+            setLoading(false)
+
+            setError(
+                "Usuário não autenticado."
+            )
+
+            return
+
+        }
+
+
+        if (id) {
+
+            loadStartup()
+
+        } else {
+
+            loadStartups()
+
+        }
+
+    }, [
+        id,
+        user,
+        authLoading
+    ])
+
+
+    // ==========================================
+    // LOADING
+    // ==========================================
+
+    if (
+        loading ||
+        authLoading
+    ) {
 
         return (
+
             <div className="startup-page">
 
                 <div className="startup-box">
 
                     <h2>
-                        🚀 Carregando startup...
+                        🚀 Carregando startups...
                     </h2>
 
                 </div>
 
             </div>
+
         )
+
     }
 
-    if (error || !startup) {
+
+    // ==========================================
+    // LISTA
+    // ==========================================
+
+    if (!id) {
 
         return (
+
+            <div className="startup-page">
+
+                <section className="startup-box">
+
+                    <div className="startup-goals-header">
+
+                        <div>
+
+                            <h1>
+                                🚀 Minhas Startups
+                            </h1>
+
+                            <span className="startup-count">
+                                {startups.length}{" "}
+                                {startups.length === 1
+                                    ? "startup"
+                                    : "startups"}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {error && (
+
+                        <div className="login-message login-error">
+
+                            {error}
+
+                        </div>
+
+                    )}
+
+
+                    {startups.length === 0 ? (
+
+                        <div className="startup-box">
+
+                            <h2>
+                                Você ainda não criou nenhuma startup.
+                            </h2>
+
+                            <p>
+                                Crie sua primeira startup
+                                e comece a transformar sua ideia
+                                em realidade! 🚀
+                            </p>
+
+
+                            <Button
+                                onClick={() =>
+                                    navigate(
+                                        "/create-startup"
+                                    )
+                                }
+                            >
+                                🚀 Criar minha primeira startup
+                            </Button>
+
+                        </div>
+
+                    ) : (
+
+                        <div className="startup-grid">
+
+                            {startups.map(
+                                startupItem => (
+
+                                    <div
+                                        key={
+                                            startupItem.id
+                                        }
+
+                                        className="startup-box"
+
+                                        style={{
+                                            cursor: "pointer"
+                                        }}
+
+                                        onClick={() =>
+                                            navigate(
+                                                `/startups/${startupItem.id}`
+                                            )
+                                        }
+                                    >
+
+                                        <span>
+                                            {
+                                                startupItem.category
+                                            }
+                                        </span>
+
+
+                                        <h2>
+                                            {
+                                                startupItem.name
+                                            }
+                                        </h2>
+
+
+                                        <p>
+                                            {
+                                                startupItem.solution
+                                            }
+                                        </p>
+
+
+                                        <strong>
+                                            Estágio:{" "}
+                                            {
+                                                startupItem.stage
+                                            }
+                                        </strong>
+
+                                    </div>
+
+                                )
+                            )}
+
+                        </div>
+
+                    )}
+
+                </section>
+
+            </div>
+
+        )
+
+    }
+
+
+    // ==========================================
+    // ERRO DOS DETALHES
+    // ==========================================
+
+    if (
+        error ||
+        !startup
+    ) {
+
+        return (
+
             <div className="startup-page">
 
                 <div className="startup-box">
@@ -129,7 +555,9 @@ function Startup() {
 
                     <Button
                         onClick={() =>
-                            navigate("/startups")
+                            navigate(
+                                "/startups"
+                            )
                         }
                     >
                         ← Voltar
@@ -138,34 +566,52 @@ function Startup() {
                 </div>
 
             </div>
+
         )
+
     }
 
+
+    // ==========================================
+    // PROGRESSO
+    // ==========================================
+
     const currentStageIndex =
-        stages.indexOf(startup.stage)
+        stages.indexOf(
+            startup.stage
+        )
+
 
     const completedGoals =
         goals.filter(
-            (goal) => goal.completed
+            goal =>
+                goal.completed
         ).length
+
 
     const totalGoals =
         goals.length
+
 
     const progress =
         totalGoals === 0
             ? 0
             : Math.round(
-                  (completedGoals /
-                      totalGoals) *
-                      100
-              )
+                (
+                    completedGoals /
+                    totalGoals
+                ) * 100
+            )
+
+
+    // ==========================================
+    // DETALHES
+    // ==========================================
 
     return (
 
         <div className="startup-page">
 
-            {/* HERO */}
 
             <section className="startup-hero">
 
@@ -173,21 +619,31 @@ function Startup() {
                     🚀
                 </div>
 
+
                 <div className="startup-title">
 
                     <span>
-                        {startup.category}
+                        {
+                            startup.category
+                        }
                     </span>
 
+
                     <h1>
-                        {startup.name}
+                        {
+                            startup.name
+                        }
                     </h1>
 
+
                     <p>
-                        {startup.solution}
+                        {
+                            startup.solution
+                        }
                     </p>
 
                 </div>
+
 
                 <Button
                     onClick={() =>
@@ -199,13 +655,14 @@ function Startup() {
                     ⚙️ Gerenciar
                 </Button>
 
+
             </section>
+
 
             <div className="startup-grid">
 
                 <div>
 
-                    {/* SOBRE */}
 
                     <section className="startup-box">
 
@@ -214,12 +671,13 @@ function Startup() {
                         </h2>
 
                         <p>
-                            {startup.solution}
+                            {
+                                startup.solution
+                            }
                         </p>
 
                     </section>
 
-                    {/* PROBLEMA */}
 
                     <section className="startup-box">
 
@@ -228,12 +686,13 @@ function Startup() {
                         </h2>
 
                         <p>
-                            {startup.problem}
+                            {
+                                startup.problem
+                            }
                         </p>
 
                     </section>
 
-                    {/* PÚBLICO */}
 
                     <section className="startup-box">
 
@@ -242,12 +701,13 @@ function Startup() {
                         </h2>
 
                         <p>
-                            {startup.audience}
+                            {
+                                startup.audience
+                            }
                         </p>
 
                     </section>
 
-                    {/* MODELO DE NEGÓCIO */}
 
                     <section className="startup-box">
 
@@ -256,12 +716,13 @@ function Startup() {
                         </h2>
 
                         <p>
-                            {startup.business_model}
+                            {
+                                startup.business_model
+                            }
                         </p>
 
                     </section>
 
-                    {/* ROADMAP */}
 
                     <section className="startup-box">
 
@@ -269,34 +730,45 @@ function Startup() {
                             Roadmap
                         </h2>
 
+
                         <div className="roadmap">
 
                             {stages.map(
-                                (stage, index) => {
+                                (
+                                    stage,
+                                    index
+                                ) => {
 
                                     const completed =
                                         index <
                                         currentStageIndex
 
+
                                     const active =
                                         index ===
                                         currentStageIndex
 
+
                                     return (
 
                                         <div
+
                                             key={stage}
-                                            className={
-                                                `roadmap-item ${
+
+                                            className={`
+                                                roadmap-item
+                                                ${
                                                     completed
                                                         ? "done"
                                                         : ""
-                                                } ${
+                                                }
+                                                ${
                                                     active
                                                         ? "active"
                                                         : ""
-                                                }`
-                                            }
+                                                }
+                                            `}
+
                                         >
 
                                             <strong>
@@ -306,16 +778,23 @@ function Startup() {
                                             <span>
 
                                                 {completed
+
                                                     ? "Concluído"
+
                                                     : active
+
                                                     ? "Em andamento"
-                                                    : "Pendente"}
+
+                                                    : "Pendente"
+
+                                                }
 
                                             </span>
 
                                         </div>
 
                                     )
+
                                 }
                             )}
 
@@ -323,7 +802,6 @@ function Startup() {
 
                     </section>
 
-                    {/* METAS */}
 
                     <section className="startup-box">
 
@@ -342,73 +820,102 @@ function Startup() {
 
                             </div>
 
+
                             <strong>
                                 {progress}%
                             </strong>
 
                         </div>
 
+
                         <div className="startup-progress">
 
                             <div
                                 style={{
-                                    width: `${progress}%`
+                                    width:
+                                        `${progress}%`
                                 }}
                             />
 
                         </div>
 
+
                         <div className="startup-goals">
 
-                            {goals.map(
-                                (goal) => (
+                            {goals.length === 0 ? (
 
-                                    <div
-                                        key={goal.id}
-                                        className={
-                                            goal.completed
-                                                ? "goal completed"
-                                                : "goal"
-                                        }
-                                    >
+                                <p>
+                                    Nenhuma meta cadastrada.
+                                </p>
 
-                                        <span>
+                            ) : (
 
-                                            {goal.completed
-                                                ? "✓"
-                                                : "○"}
+                                goals.map(
+                                    goal => (
 
-                                        </span>
+                                        <div
 
-                                        <div>
+                                            key={
+                                                goal.id
+                                            }
 
-                                            <strong>
-                                                {goal.title}
-                                            </strong>
+                                            className={
+                                                goal.completed
+                                                    ? "goal completed"
+                                                    : "goal"
+                                            }
 
-                                            <p>
+                                        >
+
+                                            <span>
+
                                                 {
-                                                    goal.description
+                                                    goal.completed
+                                                        ? "✓"
+                                                        : "○"
                                                 }
-                                            </p>
+
+                                            </span>
+
+
+                                            <div>
+
+                                                <strong>
+                                                    {
+                                                        goal.title
+                                                    }
+                                                </strong>
+
+                                                <p>
+                                                    {
+                                                        goal.description
+                                                    }
+                                                </p>
+
+                                            </div>
 
                                         </div>
 
-                                    </div>
-
+                                    )
                                 )
+
                             )}
 
                         </div>
 
                     </section>
 
+
                 </div>
 
             </div>
 
         </div>
+
     )
+
 }
 
+
 export default Startup
+

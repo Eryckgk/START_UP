@@ -1,15 +1,17 @@
+
 import { useState } from "react"
+
 import { Link, useNavigate } from "react-router-dom"
 
 import Button from "../../components/Button/Button"
-import useAuth from "../../hooks/useAuth"
+
+import { supabase } from "../../services/supabase"
 
 import "./Register.css"
 
 function Register() {
 
     const navigate = useNavigate()
-    const { register } = useAuth()
 
     const [formData, setFormData] = useState({
         name: "",
@@ -25,9 +27,12 @@ function Register() {
 
     function handleChange(event) {
 
-        const { name, value } = event.target
+        const {
+            name,
+            value
+        } = event.target
 
-        setFormData((current) => ({
+        setFormData(current => ({
             ...current,
             [name]: value
         }))
@@ -43,32 +48,44 @@ function Register() {
         setError("")
         setSuccess("")
 
-        if (!formData.name.trim()) {
+        // =========================
+        // VALIDAÇÕES
+        // =========================
+
+        const name = formData.name.trim()
+        const username = formData.username.trim()
+        const email = formData.email.trim().toLowerCase()
+        const password = formData.password
+        const confirmPassword = formData.confirmPassword
+
+        if (!name) {
             setError("Digite seu nome.")
             return
         }
 
-        if (!formData.username.trim()) {
+        if (!username) {
             setError("Digite seu nome de usuário.")
             return
         }
 
-        if (!formData.email.trim()) {
+        if (!email) {
             setError("Digite seu e-mail.")
             return
         }
 
-        if (!formData.email.includes("@")) {
+        if (!email.includes("@")) {
             setError("Digite um e-mail válido.")
             return
         }
 
-        if (formData.password.length < 6) {
-            setError("A senha precisa ter pelo menos 6 caracteres.")
+        if (password.length < 6) {
+            setError(
+                "A senha precisa ter pelo menos 6 caracteres."
+            )
             return
         }
 
-        if (formData.password !== formData.confirmPassword) {
+        if (password !== confirmPassword) {
             setError("As senhas não coincidem.")
             return
         }
@@ -77,96 +94,109 @@ function Register() {
 
         try {
 
-            const users =
-                JSON.parse(
-                    localStorage.getItem("startup_users") || "[]"
-                )
+            const formattedUsername =
+                username.startsWith("@")
+                    ? username
+                    : `@${username}`
 
-            const emailAlreadyExists =
-                users.some(
-                    (user) =>
-                        user.email.toLowerCase() ===
-                        formData.email.toLowerCase()
-                )
+            // =========================
+            // CRIAR USUÁRIO NO SUPABASE
+            // =========================
 
-            if (emailAlreadyExists) {
-                throw new Error(
-                    "Este e-mail já está cadastrado."
-                )
-            }
+            const {
+                data,
+                error: authError
+            } = await supabase.auth.signUp({
 
-            const usernameAlreadyExists =
-                users.some(
-                    (user) =>
-                        user.username.toLowerCase() ===
-                        formData.username.toLowerCase()
-                )
+                email,
 
-            if (usernameAlreadyExists) {
-                throw new Error(
-                    "Este nome de usuário já está cadastrado."
-                )
-            }
+                password,
 
-            const newUser = {
-                id: Date.now(),
+                options: {
 
-                name: formData.name.trim(),
+                    data: {
 
-                username: formData.username
-                    .trim()
-                    .startsWith("@")
-                    ? formData.username.trim()
-                    : `@${formData.username.trim()}`,
+                        name,
 
-                email: formData.email.trim().toLowerCase(),
+                        username:
+                            formattedUsername,
 
-                password: formData.password,
+                        role:
+                            "Empreendedor"
 
-                role: "Empreendedor",
+                    }
 
-                bio: "",
+                }
 
-                followers: 0,
+            })
 
-                following: 0,
-
-                startups: 0,
-
-                skills: [],
-
-                createdAt: new Date().toISOString()
-            }
-
-            users.push(newUser)
-
-            localStorage.setItem(
-                "startup_users",
-                JSON.stringify(users)
+            console.log(
+                "SUPABASE SIGN UP DATA:",
+                data
             )
 
-            /*
-             * Mantemos a função do AuthContext disponível
-             * para quando o backend for conectado.
-             */
-            try {
-                await register(newUser)
-            } catch {
-                /*
-                 * Enquanto não existe backend,
-                 * o cadastro local continua funcionando.
-                 */
-            }
-
-            setSuccess(
-                "Conta criada com sucesso! Redirecionando..."
+            console.log(
+                "SUPABASE SIGN UP ERROR:",
+                authError
             )
 
+            // =========================
+            // ERRO
+            // =========================
+
+            if (authError) {
+                throw authError
+            }
+
+            // =========================
+            // VERIFICAÇÃO
+            // =========================
+
+            if (!data.user) {
+
+                throw new Error(
+                    "O Supabase não retornou o usuário criado."
+                )
+
+            }
+
+            // =========================
+            // SUCESSO
+            // =========================
+
+            if (data.session) {
+
+                setSuccess(
+                    "Conta criada com sucesso!"
+                )
+
+            } else {
+
+                setSuccess(
+                    "Conta criada! Verifique seu e-mail para confirmar a conta."
+                )
+
+            }
+
+            setFormData({
+                name: "",
+                username: "",
+                email: "",
+                password: "",
+                confirmPassword: ""
+            })
+
+            // Vai para login depois de um pequeno intervalo
             setTimeout(() => {
                 navigate("/login")
-            }, 1200)
+            }, 1800)
 
         } catch (err) {
+
+            console.error(
+                "ERRO COMPLETO NO CADASTRO:",
+                err
+            )
 
             setError(
                 err.message ||
@@ -176,10 +206,12 @@ function Register() {
         } finally {
 
             setLoading(false)
+
         }
     }
 
     return (
+
         <div className="register-container">
 
             <div className="register-card">
@@ -201,15 +233,19 @@ function Register() {
                 </div>
 
                 {error && (
+
                     <div className="register-message register-error">
                         {error}
                     </div>
+
                 )}
 
                 {success && (
+
                     <div className="register-message register-success">
                         {success}
                     </div>
+
                 )}
 
                 <form
@@ -231,6 +267,7 @@ function Register() {
                             value={formData.name}
                             onChange={handleChange}
                             autoComplete="name"
+                            required
                         />
 
                     </div>
@@ -249,6 +286,7 @@ function Register() {
                             value={formData.username}
                             onChange={handleChange}
                             autoComplete="username"
+                            required
                         />
 
                     </div>
@@ -267,6 +305,7 @@ function Register() {
                             value={formData.email}
                             onChange={handleChange}
                             autoComplete="email"
+                            required
                         />
 
                     </div>
@@ -285,6 +324,8 @@ function Register() {
                             value={formData.password}
                             onChange={handleChange}
                             autoComplete="new-password"
+                            minLength={6}
+                            required
                         />
 
                     </div>
@@ -303,6 +344,8 @@ function Register() {
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             autoComplete="new-password"
+                            minLength={6}
+                            required
                         />
 
                     </div>
@@ -338,3 +381,4 @@ function Register() {
 }
 
 export default Register
+

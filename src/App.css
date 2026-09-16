@@ -4,32 +4,113 @@
 
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
 
-    gap: 16px;
+    gap: 18px;
 
-    background: #f8fafc;
+    background:
+        radial-gradient(
+            circle at top,
+            #eef6ff 0%,
+            #f8fbff 38%,
+            #eef4fa 100%
+        );
 
-    color: #475569;
+    color: #1e3a5f;
 
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+
+    position: relative;
+    overflow: hidden;
 }
 
-.app-loading-spinner {
-    width: 36px;
-    height: 36px;
 
-    border: 3px solid #dbeafe;
-    border-top-color: #2563eb;
+/* Brilho suave no fundo */
+.app-loading::before {
+    content: "";
+
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
+
+    top: -160px;
+    left: -120px;
+
+    background: rgba(147, 197, 253, 0.25);
 
     border-radius: 50%;
 
-    animation: app-spin 0.8s linear infinite;
+    filter: blur(30px);
+
+    pointer-events: none;
 }
 
+
+.app-loading::after {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -100px;
+    bottom: -120px;
+
+    background: rgba(186, 230, 253, 0.35);
+
+    border-radius: 50%;
+
+    filter: blur(35px);
+
+    pointer-events: none;
+}
+
+
+/* Spinner */
+.app-loading-spinner {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    border: 4px solid rgba(59, 130, 246, 0.15);
+
+    border-top-color: #2563eb;
+
+    border-right-color: #60a5fa;
+
+    animation:
+        app-spin 0.85s linear infinite;
+
+    position: relative;
+
+    z-index: 1;
+
+    box-shadow:
+        0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+
+/* Texto */
+.app-loading span {
+    position: relative;
+
+    z-index: 1;
+
+    color: #334e68;
+
+    animation:
+        app-loading-pulse 1.5s ease-in-out infinite;
+}
+
+
+/* Animações */
 @keyframes app-spin {
 
     from {
@@ -38,6 +119,22 @@
 
     to {
         transform: rotate(360deg);
+    }
+
+}
+
+
+@keyframes app-loading-pulse {
+
+    0%,
+    100% {
+        opacity: 0.65;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-2px);
     }
 
 }
